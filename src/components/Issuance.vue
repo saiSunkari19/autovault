@@ -23,7 +23,7 @@
         </li>
         <li>
           <label for="gas">Gas: </label>
-          <input type="number" v-model="gas" />
+          <input type="text" v-model="gas" />
         </li>
       </ul>
 
@@ -37,8 +37,11 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import Long from "long";
+import { AutonomyClient } from "@autonomysdk/ts-client";
+import { StdFee } from "@cosmjs/amino";
+import {BroadcastTxResponse} from '@cosmjs/stargate'
 export default {
   props: ["TogglePopup"],
   data() {
@@ -48,8 +51,8 @@ export default {
       displayName: "",
       decimals: 6,
       initialSupply: 1000000,
-      gas: 200000,
-      res: null,
+      gas: "200000",
+      res: [] as BroadcastTxResponse[],
     };
   },
   methods: {
@@ -63,31 +66,37 @@ export default {
       );
 
       try {
-      let wallet = await this.$store.getters.getWallet;
-      let client = await this.$store.getters.getClient;
+        let wallet = await this.$store.getters.getWallet;
+        let endpoints = await this.$store.getters.getEndPoints;
+        let options = await this.$store.getters.getOptions;
 
-      let [account] = await wallet.getAccounts();
-      const fee = {
-        amount: [
-          {
-            denom: "atn",
-            amount: "10",
-          },
-        ],
-        gas: this.gas,
-      };
-      const res = await client.issueTokens(
-        account.address,
-        this.denom,
-        this.displayName,
-        new Long(this.decimals),
-        new Long(this.initialSupply),
-        fee,
-        "test-1"
-      );
+        let autonomyClient = await AutonomyClient.autonomySigner(
+          endpoints.rpc,
+          wallet,
+          options
+        );
+        let [account] = await wallet.getAccounts();
+        const fee: StdFee = {
+          amount: [
+            {
+              denom: "atn",
+              amount: "10",
+            },
+          ],
+          gas: this.gas,
+        };
+        const res = await autonomyClient.issueTokens(
+          account.address,
+          this.denom,
+          this.displayName,
+          new Long(this.decimals),
+          new Long(this.initialSupply),
+          fee,
+          "test-1"
+        );
 
-      console.log(res);
-      this.res = res;
+        console.log(res);
+        this.res.push(res);
       } catch (e) {
         console.log(e);
       }

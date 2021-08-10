@@ -3,7 +3,7 @@ import { InjectionKey } from 'vue'
 import { AutonomyClient } from '@autonomysdk/ts-client'
 export interface State {
   wallet: any
-  client: AutonomyClient
+  client: any
   queryClient: any
   options: any
   hasWallet: any
@@ -14,7 +14,7 @@ export const key: InjectionKey<Store<State>> = Symbol()
 export const store = createStore<State>({
   state: {
     wallet: {},
-    client: any,
+    client: {},
     queryClient: {},
     options: {},
     hasWallet: false,

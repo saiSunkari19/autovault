@@ -64,7 +64,7 @@ export default defineComponent({
       let bal = parseCoins(this.amount);
       try {
         for (let i = 0; i < 3; i++) {
-          const resSend = await client.sendTokens(
+          const resSend = await autonomyClient.sendTokens(
             addres.address,
             this.recipient,
             bal,

@@ -1,6 +1,19 @@
 <template>
-  <div>
-    <button @click="getAccount()">Account Page</button>
+  <div class="account-wrapper">
+    <h1>Account Details</h1>
+    <div class="address-wrapper">
+      <h3>Address</h3>
+      <p>Address - {{ address }}</p>
+      <hr />
+    </div>
+    <div class="balance-wrapper">
+      <h3>Balances</h3>
+      <hr />
+      <ul v-for="(balance, index) in balances" :key="index">
+        <li>{{ balance.denom }} - {{ balance.amount }}</li>
+      </ul>
+    </div>
+    <button @click="getBalances()">Account Page</button>
 
     <div class="account" v-if="account">
       {{ account }}
@@ -9,35 +22,33 @@
 </template>
 <script lang="ts">
 import { BaseAccount } from "@/codec/cosmos/auth/v1beta1/auth";
-import { Any } from "@cosmjs/proto-signing/build/codec/google/protobuf/any";
 import { defineComponent } from "@vue/runtime-core";
 export default defineComponent({
   name: "Account",
   data() {
     return {
-      client: null,
-      account: {} as BaseAccount,
+      address: null,
+      balances: null,
     };
   },
 
   created() {
-    this.getAccount();
+    this.getBalances();
   },
   methods: {
-    async getAccount() {
+    async getBalances() {
       const wallet = await this.$store.getters.getWallet;
       const queryclient = await this.$store.getters.getQueryClient;
-      this.client = queryclient;
-      await this.$store.dispatch("setQueryClient", this.client);
 
       // Account fetch
       let [account] = await wallet.getAccounts();
-      console.log("Created status on Account", account.address);
-      let res = await queryclient.auth.account(account.address);
-
-      this.account = BaseAccount.decode(res.value);
-      console.log(account);
+      this.address = account.address;
+      let res = await queryclient.bank.allBalances(account.address);
+      console.log(res);
+      this.balances = res;
     },
   },
 });
 </script>
+<style lang="scss" scoped>
+</style>
