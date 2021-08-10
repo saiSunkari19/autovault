@@ -2,24 +2,26 @@
   <div class="container">
     <h1>My Tokens</h1>
     <div class="" v-if="loading">Loading...</div>
-    <table>
-      <tr>
-        <th>Creator</th>
-        <th>Id</th>
-        <th>Denom</th>
-        <th>DisplayName</th>
-        <th>InitialSupply</th>
-        <th>Holders</th>
-      </tr>
-      <tr v-for="(token, index) in tokens" :key="index">
-        <td class="creator">{{ token.creator }}</td>
-        <td>{{ token.id }}</td>
-        <td>{{ token.denom }}</td>
-        <td>{{ token.displayName }}</td>
-        <td>{{ token.initialSupply }}</td>
-        <td>{{ token.holders }}</td>
-      </tr>
-    </table>
+    <div class="tokens-wrapper">
+      <table>
+        <tr>
+          <th>Creator</th>
+          <th>Id</th>
+          <th>Denom</th>
+          <th>DisplayName</th>
+          <th>InitialSupply</th>
+          <th>Holders</th>
+        </tr>
+        <tr v-for="(token, index) in tokens" :key="index">
+          <td class="creator">{{ token.creator }}</td>
+          <td>{{ token.id }}</td>
+          <td>{{ token.denom }}</td>
+          <td>{{ token.displayName }}</td>
+          <td>{{ token.initialSupply }}</td>
+          <td>{{ token.holders }}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 <script >
@@ -57,6 +59,10 @@ export default defineComponent({
   border-radius: 1rem;
   padding: 0.5rem;
   margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  flex-wrap: wrap;
   table {
     width: 90%;
     td,
@@ -70,6 +76,20 @@ export default defineComponent({
 
     tr:nth-child(even) {
       background-color: #dddddd;
+    }
+  }
+}
+@media only screen and (max-width: 900px) {
+  .container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    flex-wrap: wrap;
+    table {
+      tr {
+        overflow: scroll;
+      }
     }
   }
 }

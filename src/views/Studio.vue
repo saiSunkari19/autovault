@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <button @click="() => TogglePopup('buttonTrigger')">Create Token</button>
     <issuance
       v-if="popuptrigger.buttonTrigger"
@@ -30,3 +30,20 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.container {
+  button {
+    font-size: 1.2rem;
+    padding: 0.8rem;
+    border-radius: 1rem;
+    background: hsl(172, 67%, 45%);
+    margin-top: 2rem;
+    color: hsl(183, 100%, 15%);
+    width: auto;
+    text-transform: uppercase;
+    &:hover {
+      background-color: rgb(159, 232, 223);
+    }
+  }
+}
+</style>

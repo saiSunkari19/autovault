@@ -27,9 +27,6 @@
         </li>
       </ul>
 
-      <div class="" v-if="res">
-        {{ res }}
-      </div>
       <div class="buttons">
         <button @click="createToken">create</button>
         <button class="close" @click="TogglePopup()">close</button>
@@ -41,7 +38,11 @@
 import Long from "long";
 import { AutonomyClient } from "@autonomysdk/ts-client";
 import { StdFee } from "@cosmjs/amino";
-import {BroadcastTxResponse} from '@cosmjs/stargate'
+import {
+  BroadcastTxResponse,
+  BroadcastTxSuccess,
+  isBroadcastTxSuccess,
+} from "@cosmjs/stargate";
 export default {
   props: ["TogglePopup"],
   data() {
@@ -94,7 +95,6 @@ export default {
           fee,
           "test-1"
         );
-
         console.log(res);
         this.res.push(res);
       } catch (e) {
@@ -120,6 +120,8 @@ export default {
 
   .issue {
     padding: 0;
+    border: 2px solid hsl(183, 100%, 15%);
+    border-radius: 1rem;
     h2 {
       text-align: center;
     }
