@@ -16,8 +16,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs, ref } from "vue";
+<script >
+import { defineComponent, ref } from "vue";
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import {
   AutonomyClient,
@@ -43,7 +43,6 @@ export default defineComponent({
   },
   methods: {
     async importWallet() {
-      const store = this.store;
       let words = this.menmonic.split(" ");
       if (words.length === 12 || words.length === 24) {
         console.log(this.menmonic);
@@ -64,9 +63,10 @@ export default defineComponent({
           wallet,
           options
         );
+
         // queryClient
         const tmQueryClient = await Tendermint34Client.connect(
-          store.state.endpoints.rpc
+          this.$store.state.endpoints.rpc
         );
         const queryclient = QueryClient.withExtensions(
           tmQueryClient,
@@ -74,11 +74,11 @@ export default defineComponent({
           setupBankExtension,
           setupIssuanceExtension
         );
-        await store.dispatch("setWallet", wallet);
-        await store.dispatch("setClient", client);
-        await store.dispatch("setQueryClient", queryclient);
-        await store.dispatch("hasWallet", true);
-        console.log("queryclient issuance", queryclient.issuance);
+        await this.$store.dispatch("setWallet", wallet);
+        await this.$store.dispatch("setClient", client);
+        await this.$store.dispatch("setQueryClient", queryclient);
+        await this.$store.dispatch("setOptions", options);
+        await this.$store.dispatch("hasWallet", true);
         this.$router.push({ name: "Index" });
       } else {
         alert("Invalid Menmonic");

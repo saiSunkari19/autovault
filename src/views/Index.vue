@@ -26,7 +26,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    console.log("Index Store", store);
+    console.log("Index Store", store.getters);
     // let state = reactive({
     //   hasWallet: false,
     //   test: "",

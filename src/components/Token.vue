@@ -23,33 +23,22 @@
   </div>
 </template>
 <script >
-import { useStore } from "@/store";
-import { Token } from "@/types/Token";
-export default {
-  setup() {
-    const store = useStore();
-    return {
-      store,
-    };
-  },
+import { defineComponent } from "vue";
+export default defineComponent({
   data() {
     return {
       tokens: null,
       loading: true,
     };
   },
-  mounted() {
-    this.gettokens();
+  created() {
+    this.getTokens();
   },
   methods: {
-    async gettokens() {
-      const store = this.store;
-      let client = await store.getters.getQueryClient;
-      console.log("QueryClient", client, client.issuance);
+    async getTokens() {
       this.loading = false;
-
+      let client = await this.$store.getters.getQueryClient;
       let data = await client.issuance.tokenAll();
-
       data.forEach((element) => {
         element.holders = element.holders.toNumber();
         element.initialSupply = element.initialSupply.toNumber();
@@ -59,7 +48,7 @@ export default {
       this.tokens = data;
     },
   },
-};
+});
 </script>
 <style lang="scss" scoped>
 .container {

@@ -7,19 +7,24 @@
     </div>
   </div>
 </template>
-<script>
-// import { BaseAccount } from "@/codec/cosmos/auth/v1beta1/auth";
-export default {
+<script lang="ts">
+import { BaseAccount } from "@/codec/cosmos/auth/v1beta1/auth";
+import { Any } from "@cosmjs/proto-signing/build/codec/google/protobuf/any";
+import { defineComponent } from "@vue/runtime-core";
+export default defineComponent({
   name: "Account",
   data() {
     return {
       client: null,
-      account: null,
+      account: {} as BaseAccount,
     };
+  },
+
+  created() {
+    this.getAccount();
   },
   methods: {
     async getAccount() {
-      console.log("Account");
       const wallet = await this.$store.getters.getWallet;
       const queryclient = await this.$store.getters.getQueryClient;
       this.client = queryclient;
@@ -28,11 +33,11 @@ export default {
       // Account fetch
       let [account] = await wallet.getAccounts();
       console.log("Created status on Account", account.address);
-      let res = await queryclient.auth.verified.account(account.address);
+      let res = await queryclient.auth.account(account.address);
 
-      // this.account = BaseAccount.decode(res.value);
-      this.account = res;
+      this.account = BaseAccount.decode(res.value);
+      console.log(account);
     },
   },
-};
+});
 </script>

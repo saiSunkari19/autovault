@@ -1,10 +1,11 @@
 import { createStore, Store, useStore as baseUseStore } from 'vuex'
 import { InjectionKey } from 'vue'
-
+import { AutonomyClient } from '@autonomysdk/ts-client'
 export interface State {
   wallet: any
-  client: any
+  client: AutonomyClient
   queryClient: any
+  options: any
   hasWallet: any
   endpoints: any
 }
@@ -13,8 +14,9 @@ export const key: InjectionKey<Store<State>> = Symbol()
 export const store = createStore<State>({
   state: {
     wallet: {},
-    client: {},
+    client: any,
     queryClient: {},
+    options: {},
     hasWallet: false,
     endpoints: {
       rpc: 'localhost:26657',
@@ -30,6 +32,9 @@ export const store = createStore<State>({
     SET_QUERY_CLIENT(state, payload) {
       state.queryClient = payload
     },
+    SET_OPTIONS(state, payload) {
+      state.options = payload
+    },
     HAS_WALLET(state, payload) {
       state.hasWallet = payload
     },
@@ -44,6 +49,9 @@ export const store = createStore<State>({
     setQueryClient({ commit }, queryclient) {
       commit('SET_QUERY_CLIENT', queryclient)
     },
+    setOptions({ commit }, options) {
+      commit('SET_OPTIONS', options)
+    },
     hasWallet({ commit }, payload) {
       commit('HAS_WALLET', payload)
     },
@@ -57,6 +65,9 @@ export const store = createStore<State>({
     },
     getQueryClient(state) {
       return state.queryClient
+    },
+    getOptions(state) {
+      return state.options
     },
     hasWallet(state) {
       return state.hasWallet
