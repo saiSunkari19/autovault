@@ -1,28 +1,29 @@
 <template>
   <div class="account-wrapper">
-    <h1>Account Details</h1>
-    <div class="address-wrapper">
-      <h3>Address</h3>
-      <p>Address - {{ address }}</p>
+    <div class="account">
+      <h1>Account Details</h1>
       <hr />
+      <div class="address-wrapper">
+        <h3>Address</h3>
+        <p>{{ address }}</p>
+        <div class="balance-wrapper">
+          <h3>Balances</h3>
+          <ul v-for="(balance, index) in balances" :key="index">
+            <li>{{ balance.denom }} - {{ balance.amount }}</li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="balance-wrapper">
-      <h3>Balances</h3>
-      <hr />
-      <ul v-for="(balance, index) in balances" :key="index">
-        <li>{{ balance.denom }} - {{ balance.amount }}</li>
-      </ul>
-    </div>
-    <button @click="getBalances()">Account Page</button>
 
-    <div class="account" v-if="account">
-      {{ account }}
+    <div class="send-card">
+      <Transfer />
     </div>
   </div>
 </template>
 <script lang="ts">
 import { BaseAccount } from "@/codec/cosmos/auth/v1beta1/auth";
 import { defineComponent } from "@vue/runtime-core";
+import Transfer from "@/components/Transfer.vue";
 export default defineComponent({
   name: "Account",
   data() {
@@ -31,7 +32,9 @@ export default defineComponent({
       balances: null,
     };
   },
-
+  components: {
+    Transfer,
+  },
   created() {
     this.getBalances();
   },
@@ -51,4 +54,77 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.account-wrapper {
+  width: 80%;
+  background-color: white;
+  border-radius: 1rem;
+  display: flex;
+  font-family: "Space Mono", monospace;
+
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1rem;
+  margin-left: 7rem;
+
+  h3 {
+    color: hsl(186, 14%, 43%);
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+  }
+
+  .account {
+    margin: 2rem 0 2rem 1rem;
+    .address-wrapper {
+      font-size: 1rem;
+      float: left;
+      margin-bottom: 1rem;
+      .balance-wrapper {
+        ul li {
+          list-style-type: none;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+  .send-card {
+    margin-left: 2rem;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .account-wrapper {
+    display: flex;
+    width: 100%;
+    margin: 0.2rem 0.1rem;
+    flex-direction: column;
+    h1,
+    h3 {
+      font-size: 20px;
+    }
+    hr {
+      width: 60%;
+    }
+    .account {
+      .address-wrapper {
+        p {
+          word-wrap: break-word;
+          width: 60%;
+        }
+      }
+      .balance-wrapper {
+        font-size: 12px;
+      }
+    }
+    .send-card {
+      margin: 0;
+    }
+  }
+}
 </style>

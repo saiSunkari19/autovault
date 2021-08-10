@@ -6,17 +6,15 @@
       :TogglePopup="() => TogglePopup('buttonTrigger')"
     >
     </issuance>
-    <Account />
-    <Transfer />
+    <Token />
   </div>
 </template>
 <script>
 import Issuance from "@/components/Issuance.vue";
-import Account from "@/components/Account.vue";
-import Transfer from "@/components/Transfer.vue";
+import Token from "@/components/Token.vue";
 import { ref } from "vue";
 export default {
-  components: { Issuance, Account , Transfer},
+  components: { Issuance, Token },
   setup() {
     const popuptrigger = ref({ buttonTrigger: false });
 

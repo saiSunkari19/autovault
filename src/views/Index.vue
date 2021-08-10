@@ -4,7 +4,7 @@
       <Wallet />
     </div>
     <div v-if="hasWallet">
-      <Token />
+      <Account />
     </div>
     <!-- </div> -->
   </div>
@@ -20,18 +20,13 @@ import {
   computed,
 } from "vue";
 import Wallet from "@/components/Wallet.vue";
-import Token from "@/components/Token.vue";
+import Account from "@/components/Account.vue";
 import { useStore } from "@/store";
 export default defineComponent({
   setup() {
     const store = useStore();
 
     console.log("Index Store", store.getters);
-    // let state = reactive({
-    //   hasWallet: false,
-    //   test: "",
-    // });
-
     const hasWallet = ref(false);
     const test = ref("");
 
@@ -44,7 +39,7 @@ export default defineComponent({
   },
   components: {
     Wallet,
-    Token,
+    Account,
   },
   methods: {
     logStore() {
