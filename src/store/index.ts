@@ -1,12 +1,73 @@
-import { createStore } from 'vuex'
+import { createStore, Store, useStore as baseUseStore } from 'vuex'
+import { InjectionKey } from 'vue'
 
-export default createStore({
+export interface State {
+  wallet: any
+  client: any
+  queryClient: any
+  hasWallet: any
+  endpoints: any
+}
+
+export const key: InjectionKey<Store<State>> = Symbol()
+export const store = createStore<State>({
   state: {
+    wallet: {},
+    client: {},
+    queryClient: {},
+    hasWallet: false,
+    endpoints: {
+      rpc: 'localhost:26657',
+    },
   },
   mutations: {
+    SET_WALLET(state, payload) {
+      state.wallet = payload
+    },
+    SET_CLIENT(state, payload) {
+      state.client = payload
+    },
+    SET_QUERY_CLIENT(state, payload) {
+      state.queryClient = payload
+    },
+    HAS_WALLET(state, payload) {
+      state.hasWallet = payload
+    },
   },
   actions: {
+    setWallet({ commit }, wallet) {
+      commit('SET_WALLET', wallet)
+    },
+    setClient({ commit }, client) {
+      commit('SET_CLIENT', client)
+    },
+    setQueryClient({ commit }, queryclient) {
+      commit('SET_QUERY_CLIENT', queryclient)
+    },
+    hasWallet({ commit }, payload) {
+      commit('HAS_WALLET', payload)
+    },
   },
-  modules: {
-  }
+  getters: {
+    getWallet(state) {
+      return state.wallet
+    },
+    getClient(state) {
+      return state.client
+    },
+    getQueryClient(state) {
+      return state.queryClient
+    },
+    hasWallet(state) {
+      return state.hasWallet
+    },
+    getEndPoints(state) {
+      return state.endpoints
+    },
+  },
+  modules: {},
 })
+
+export function useStore() {
+  return baseUseStore(key)
+}

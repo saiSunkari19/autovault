@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es2017",
+    "module": "commonjs",
     "strict": true,
+    "lib":["es2017"],
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",

@@ -1,5 +1,11 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <div class="about"><wallet /></div>
 </template>
+<script>
+import Wallet from "@/components/Wallet.vue";
+export default {
+  components: {
+    Wallet,
+  },
+};
+</script>
