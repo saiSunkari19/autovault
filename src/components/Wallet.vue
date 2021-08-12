@@ -11,13 +11,25 @@
         :error="error"
       ></textarea>
       <button @click="importWallet">Import Wallet</button>
+      <button @click="() => createWallet('buttonTrigger')">
+        Create Wallet
+      </button>
     </div>
+    <div class="create-wallet">
+      <create-wallet
+        v-if="popuptrigger.buttonTrigger"
+        :TogglePopUp="() => createWallet('buttonTrigger')"
+      >
+      </create-wallet>
+    </div>
+
     <div v-if="error" class="error">{{ error }}</div>
   </div>
 </template>
 
 <script >
 import { defineComponent, ref } from "vue";
+import CreateWallet from "@/components/CreateWallet.vue";
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import {
   AutonomyClient,
@@ -35,11 +47,24 @@ import { useStore } from "@/store";
 export default defineComponent({
   setup() {
     const store = useStore();
+
+    const popuptrigger = ref({
+      buttonTrigger: false,
+    });
+
+    const createWallet = (trigger) => {
+      popuptrigger.value[trigger] = !popuptrigger.value[trigger];
+    };
     let menmonic = ref("");
     return {
       store,
       menmonic,
+      createWallet,
+      popuptrigger,
     };
+  },
+  components: {
+    CreateWallet,
   },
   methods: {
     async importWallet() {
@@ -114,8 +139,8 @@ export default defineComponent({
     button {
       //   margin: 2rem 0 0 5rem;
       font-family: "Space Mono", monospace;
-
       border: none;
+      display: inline;
       text-align: center;
       background: hsl(172, 67%, 45%);
       border-radius: 0.5rem;

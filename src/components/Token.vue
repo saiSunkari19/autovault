@@ -1,4 +1,5 @@
 <template>
+.card
   <div class="container">
     <h1>My Tokens</h1>
     <div class="" v-if="loading">Loading...</div>
@@ -71,7 +72,6 @@ export default defineComponent({
       text-align: left;
       padding: 5px;
       width: 10%;
-      overflow: scroll;
     }
 
     tr:nth-child(even) {

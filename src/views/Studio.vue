@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="hasWallet">
     <button @click="() => TogglePopup('buttonTrigger')">Create Token</button>
     <issuance
       v-if="popuptrigger.buttonTrigger"
@@ -12,11 +12,13 @@
 <script>
 import Issuance from "@/components/Issuance.vue";
 import Token from "@/components/Token.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useStore } from "@/store";
 export default {
   components: { Issuance, Token },
   setup() {
     const popuptrigger = ref({ buttonTrigger: false });
+    const store = useStore();
 
     const TogglePopup = (trigger) => {
       popuptrigger.value[trigger] = !popuptrigger.value[trigger];
@@ -26,6 +28,7 @@ export default {
       Issuance,
       popuptrigger,
       TogglePopup,
+      hasWallet: computed(() => store.getters.hasWallet),
     };
   },
 };

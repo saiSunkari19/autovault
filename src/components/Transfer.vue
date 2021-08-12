@@ -57,14 +57,15 @@ export default defineComponent({
 
       let bal = parseCoins(this.amount);
       try {
-        for (let i = 0; i < 3; i++) {
-          const resSend = await autonomyClient.sendTokens(
-            addres.address,
-            this.recipient,
-            bal,
-            "Memo tx"
-          );
-          this.response.push(resSend);
+        const resSend: BroadcastTxResponse = await autonomyClient.sendTokens(
+          addres.address,
+          this.recipient,
+          bal,
+          "Memo tx"
+        );
+
+        if(resSend.code !=0){
+          alert(resSend.rawLog)
         }
       } catch (e) {
         alert(e);
@@ -102,7 +103,7 @@ export default defineComponent({
     }
     .inp-text {
       border: none;
-      text-align: right;
+      text-align: left;
       font-family: "Space Mono", monospace;
       font-weight: 700;
       border-radius: 0.5rem;

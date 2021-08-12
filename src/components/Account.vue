@@ -8,7 +8,7 @@
         <p>{{ address }}</p>
         <div class="balance-wrapper">
           <h3>Balances</h3>
-          <ul v-for="(balance, index) in balances" :key="index">
+          <ul v-for="(balance, index) in getSortedBalances" :key="index">
             <li>{{ balance.denom }} - {{ balance.amount }}</li>
           </ul>
         </div>
@@ -20,23 +20,31 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+<script >
 import { BaseAccount } from "@/codec/cosmos/auth/v1beta1/auth";
 import { defineComponent } from "@vue/runtime-core";
 import Transfer from "@/components/Transfer.vue";
+import { coins } from "@cosmjs/stargate";
 export default defineComponent({
   name: "Account",
   data() {
     return {
       address: null,
-      balances: null,
+      balances: [],
     };
   },
   components: {
     Transfer,
   },
-  created() {
+  mounted() {
     this.getBalances();
+  },
+  computed: {
+    getSortedBalances() {
+      return [...this.balances].sort((a, b) => {
+        return a.denom.toLowerCase() > b.denom.toLowerCase() ? 1 : -1;
+      });
+    },
   },
   methods: {
     async getBalances() {
@@ -89,6 +97,7 @@ export default defineComponent({
         ul li {
           list-style-type: none;
           font-size: 1rem;
+          text-transform: uppercase;
         }
       }
     }

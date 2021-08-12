@@ -38,11 +38,7 @@
 import Long from "long";
 import { AutonomyClient } from "@autonomysdk/ts-client";
 import { StdFee } from "@cosmjs/amino";
-import {
-  BroadcastTxResponse,
-  BroadcastTxSuccess,
-  isBroadcastTxSuccess,
-} from "@cosmjs/stargate";
+import { BroadcastTxResponse } from "@cosmjs/stargate";
 export default {
   props: ["TogglePopup"],
   data() {
@@ -86,7 +82,7 @@ export default {
           ],
           gas: this.gas,
         };
-        const res = await autonomyClient.issueTokens(
+        const res: BroadcastTxResponse = await autonomyClient.issueTokens(
           account.address,
           this.denom,
           this.displayName,
@@ -95,10 +91,16 @@ export default {
           fee,
           "test-1"
         );
-        console.log(res);
-        this.res.push(res);
+        console.log("Error", res);
+
+        if (res.code == 0) {
+          this.TogglePopup();
+        } else {
+          alert(res.rawLog);
+        }
+        // this.res.push(res);
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     },
   },
