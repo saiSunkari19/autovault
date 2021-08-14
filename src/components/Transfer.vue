@@ -64,9 +64,9 @@ export default defineComponent({
           "Memo tx"
         );
 
-        if(resSend.code !=0){
-          alert(resSend.rawLog)
-        }
+        // if (resSend.code != 0) {
+        //   alert(resSend.rawLog);
+        // }
       } catch (e) {
         alert(e);
       }

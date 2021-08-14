@@ -34,22 +34,28 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+<script >
 import Long from "long";
 import { AutonomyClient } from "@autonomysdk/ts-client";
 import { StdFee } from "@cosmjs/amino";
 import { BroadcastTxResponse } from "@cosmjs/stargate";
+import { reactive, toRefs } from "@vue/reactivity";
 export default {
   props: ["TogglePopup"],
-  data() {
-    return {
+
+  setup() {
+    const state = reactive({
       sender: "",
       denom: "",
       displayName: "",
       decimals: 6,
       initialSupply: 1000000,
       gas: "200000",
-      res: [] as BroadcastTxResponse[],
+      res: [],
+    });
+
+    return {
+      ...toRefs(state),
     };
   },
   methods: {
@@ -73,7 +79,7 @@ export default {
           options
         );
         let [account] = await wallet.getAccounts();
-        const fee: StdFee = {
+        const fee = {
           amount: [
             {
               denom: "atn",
@@ -82,7 +88,7 @@ export default {
           ],
           gas: this.gas,
         };
-        const res: BroadcastTxResponse = await autonomyClient.issueTokens(
+        const res = await autonomyClient.issueTokens(
           account.address,
           this.denom,
           this.displayName,

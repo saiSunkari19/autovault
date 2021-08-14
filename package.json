@@ -2,13 +2,14 @@
   "name": "autovault",
   "version": "0.1.0",
   "private": true,
+  "license": "ISC",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@autonomysdk/ts-client": "^0.1.3",
+    "@autonomysdk/ts-client": "^0.1.4",
     "@cosmjs/proto-signing": "^0.25.6",
     "@cosmjs/stargate": "^0.25.6",
     "@cosmjs/tendermint-rpc": "^0.25.6",

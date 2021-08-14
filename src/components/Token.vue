@@ -1,5 +1,5 @@
 <template>
-.card
+  .card
   <div class="container">
     <h1>My Tokens</h1>
     <div class="" v-if="loading">Loading...</div>
@@ -10,6 +10,7 @@
           <th>Id</th>
           <th>Denom</th>
           <th>DisplayName</th>
+          <th>Decimals</th>
           <th>InitialSupply</th>
           <th>Holders</th>
         </tr>
@@ -18,6 +19,7 @@
           <td>{{ token.id }}</td>
           <td>{{ token.denom }}</td>
           <td>{{ token.displayName }}</td>
+          <td>{{ token.decimals }}</td>
           <td>{{ token.initialSupply }}</td>
           <td>{{ token.holders }}</td>
         </tr>
@@ -45,9 +47,11 @@ export default defineComponent({
       data.forEach((element) => {
         element.holders = element.holders.toNumber();
         element.initialSupply = element.initialSupply.toNumber();
+        element.decimals = element.decimals.toNumber();
         element.id = element.id.toNumber();
       });
 
+      console.log("tokens", data);
       this.tokens = data;
     },
   },
