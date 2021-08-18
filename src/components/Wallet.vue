@@ -1,6 +1,14 @@
 <template>
+  <div class="create-wallet">
+    <create-wallet
+      v-if="popuptrigger.buttonTrigger"
+      :TogglePopUp="() => createWallet('buttonTrigger')"
+    >
+    </create-wallet>
+  </div>
   <div class="wallet">
     <h1>AutoVault</h1>
+
     <div class="card">
       <textarea
         name="mnemonic"
@@ -14,13 +22,6 @@
       <button @click="() => createWallet('buttonTrigger')">
         Create Wallet
       </button>
-    </div>
-    <div class="create-wallet">
-      <create-wallet
-        v-if="popuptrigger.buttonTrigger"
-        :TogglePopUp="() => createWallet('buttonTrigger')"
-      >
-      </create-wallet>
     </div>
 
     <div v-if="error" class="error">{{ error }}</div>
