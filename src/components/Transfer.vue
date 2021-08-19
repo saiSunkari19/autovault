@@ -19,7 +19,6 @@ import { parseCoins } from "@cosmjs/stargate";
 import { defineComponent, toRefs, reactive, onMounted } from "vue";
 import Long from "long";
 import { AutonomyClient, autonomyRegistry } from "@autonomysdk/ts-client";
-import { GasPrice, BroadcastTxResponse } from "@cosmjs/stargate";
 
 export default defineComponent({
   setup() {
@@ -40,7 +39,7 @@ export default defineComponent({
 
       console.log("Options==", wallet, options);
       const autonomyClient = await AutonomyClient.autonomySigner(
-        "localhost:26657",
+        this.$store.state.endpoints.rpc,
         wallet,
         options
       );

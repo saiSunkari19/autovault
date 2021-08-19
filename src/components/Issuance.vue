@@ -83,7 +83,7 @@ export default {
           amount: [
             {
               denom: "aut",
-              amount: "10",
+              amount: "30",
             },
           ],
           gas: this.gas,
