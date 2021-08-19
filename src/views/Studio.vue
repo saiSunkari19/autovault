@@ -8,7 +8,7 @@
     </issuance>
     <Token />
   </div>
-  <div>
+  <div v-else>
     <h2>
       Wallet not initilized go to
       <router-link to="/">Home</router-link>

@@ -82,7 +82,7 @@ export default {
         const fee = {
           amount: [
             {
-              denom: "atn",
+              denom: "aut",
               amount: "10",
             },
           ],
