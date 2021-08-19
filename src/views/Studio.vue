@@ -8,6 +8,12 @@
     </issuance>
     <Token />
   </div>
+  <div>
+    <h2>
+      Wallet not initilized go to
+      <router-link to="/">Home</router-link>
+    </h2>
+  </div>
 </template>
 <script>
 import Issuance from "@/components/Issuance.vue";

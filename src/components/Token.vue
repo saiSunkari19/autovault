@@ -1,5 +1,4 @@
 <template>
-  .card
   <div class="container">
     <h1>My Tokens</h1>
     <div class="" v-if="loading">Loading...</div>
@@ -42,10 +41,13 @@ export default defineComponent({
   },
   computed: {
     getOwnTokens() {
-      return this.tokens && this.tokens.filter((token) => {
-        console.log("Token====", token);
-        return token.creator === this.address;
-      });
+      return (
+        this.tokens &&
+        this.tokens.filter((token) => {
+          console.log("Token====", token);
+          return token.creator === this.address;
+        })
+      );
     },
   },
   methods: {

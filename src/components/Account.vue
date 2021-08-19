@@ -12,7 +12,7 @@
             <li>{{ balance.denom }} - {{ balance.amount }}</li>
           </ul>
         </div>
-        <div class="faucet" v-else-if="!balances.length">
+        <div class="faucet" v-else>
           <button @click="getTokens">Get Tokens</button>
         </div>
       </div>
