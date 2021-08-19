@@ -6,11 +6,14 @@
       <div class="address-wrapper">
         <h3>Address</h3>
         <p>{{ address }}</p>
-        <div class="balance-wrapper">
+        <div class="balance-wrapper" v-if="balances.length">
           <h3>Balances</h3>
           <ul v-for="(balance, index) in getSortedBalances" :key="index">
             <li>{{ balance.denom }} - {{ balance.amount }}</li>
           </ul>
+        </div>
+        <div class="faucet" v-else-if="!balances.length">
+          <button @click="getTokens">Get Tokens</button>
         </div>
       </div>
     </div>
@@ -21,10 +24,9 @@
   </div>
 </template>
 <script >
-import { BaseAccount } from "@/codec/cosmos/auth/v1beta1/auth";
 import { defineComponent } from "@vue/runtime-core";
 import Transfer from "@/components/Transfer.vue";
-import { coins } from "@cosmjs/stargate";
+import { FaucetClient } from "@cosmjs/faucet-client";
 export default defineComponent({
   name: "Account",
   data() {
@@ -46,6 +48,7 @@ export default defineComponent({
       });
     },
   },
+
   methods: {
     async getBalances() {
       const wallet = await this.$store.getters.getWallet;
@@ -57,6 +60,17 @@ export default defineComponent({
       let res = await queryclient.bank.allBalances(account.address);
       console.log(res);
       this.balances = res;
+    },
+    async getTokens() {
+      const endpoints = await this.$store.getters.getEndPoints;
+      const faucetClient = new FaucetClient(endpoints.faucet);
+
+      const res = await faucetClient.credit(
+        this.address,
+        endpoints.faucetDenom
+      );
+
+      console.log(res);
     },
   },
 });
@@ -98,6 +112,22 @@ export default defineComponent({
           list-style-type: none;
           font-size: 1rem;
           text-transform: uppercase;
+        }
+      }
+
+      .faucet {
+        button {
+          font-size: 1.2rem;
+          padding: 0.8rem;
+          border-radius: 1rem;
+          background: hsl(172, 67%, 45%);
+          margin-top: 2rem;
+          color: hsl(183, 100%, 15%);
+          width: 60%;
+          text-transform: uppercase;
+          &:hover {
+            background-color: rgb(159, 232, 223);
+          }
         }
       }
     }

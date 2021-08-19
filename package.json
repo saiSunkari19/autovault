@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@autonomysdk/ts-client": "^0.1.4",
+    "@cosmjs/faucet-client": "^0.25.6",
     "@cosmjs/proto-signing": "^0.25.6",
     "@cosmjs/stargate": "^0.25.6",
     "@cosmjs/tendermint-rpc": "^0.25.6",

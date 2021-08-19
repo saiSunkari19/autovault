@@ -957,6 +957,13 @@
     "bech32" "^1.1.4"
     "readonly-date" "^1.0.0"
 
+"@cosmjs/faucet-client@^0.25.6":
+  "integrity" "sha512-F138qzHIL3VlrAi0Tks3eYJcXmD5oe47596dg8erVj4DriH2VckQXNWXIS1zGBD5bEis3rr9WvIYWx6f6SZW6w=="
+  "resolved" "https://registry.npmjs.org/@cosmjs/faucet-client/-/faucet-client-0.25.6.tgz"
+  "version" "0.25.6"
+  dependencies:
+    "axios" "^0.21.1"
+
 "@cosmjs/json-rpc@^0.25.6":
   "integrity" "sha512-Mn9og3/IEzC6jWoYXs0ONqFJc8HxVjXzrZPLgaRRdMZEUBvctxdhynau1wbE4LdkYQHbu4aiRu1q1jMYGFAj4A=="
   "resolved" "https://registry.npmjs.org/@cosmjs/json-rpc/-/json-rpc-0.25.6.tgz"

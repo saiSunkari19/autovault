@@ -14,7 +14,7 @@
           <th>InitialSupply</th>
           <th>Holders</th>
         </tr>
-        <tr v-for="(token, index) in tokens" :key="index">
+        <tr v-for="(token, index) in getOwnTokens" :key="index">
           <td class="creator">{{ token.creator }}</td>
           <td>{{ token.id }}</td>
           <td>{{ token.denom }}</td>
@@ -34,15 +34,26 @@ export default defineComponent({
     return {
       tokens: null,
       loading: true,
+      address: "",
     };
   },
-  created() {
+  mounted() {
     this.getTokens();
+  },
+  computed: {
+    getOwnTokens() {
+      return this.tokens && this.tokens.filter((token) => {
+        console.log("Token====", token);
+        return token.creator === this.address;
+      });
+    },
   },
   methods: {
     async getTokens() {
       this.loading = false;
       let client = await this.$store.getters.getQueryClient;
+      let wallet = await this.$store.getters.getWallet;
+      let [account] = await wallet.getAccounts();
       let data = await client.issuance.tokenAll();
       data.forEach((element) => {
         element.holders = element.holders.toNumber();
@@ -51,7 +62,7 @@ export default defineComponent({
         element.id = element.id.toNumber();
       });
 
-      console.log("tokens", data);
+      this.address = account.address;
       this.tokens = data;
     },
   },

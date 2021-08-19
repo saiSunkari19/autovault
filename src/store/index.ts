@@ -20,6 +20,8 @@ export const store = createStore<State>({
     hasWallet: false,
     endpoints: {
       rpc: 'localhost:26657',
+      faucet: 'http://localhost:8000',
+      faucetDenom: 'atn',
     },
   },
   mutations: {

@@ -8,18 +8,12 @@
       <label for="memo"> Memo:</label>
       <input type="text" class="inp-text" v-model="memo" />
       <button @click="transfer">Send</button>
-
-      <div class="check" v-if="response">
-        <div class="res" v-for="res in response" :key="res.transactionHash">
-          {{ res }}
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 
-<script lang="ts">
+<script >
 import { parseCoins } from "@cosmjs/stargate";
 
 import { defineComponent, toRefs, reactive, onMounted } from "vue";
@@ -33,7 +27,7 @@ export default defineComponent({
       recipient: "",
       amount: "",
       memo: null,
-      response: [] as BroadcastTxResponse[],
+      response: [],
     });
     return {
       ...toRefs(state),
@@ -41,7 +35,6 @@ export default defineComponent({
   },
   methods: {
     async transfer() {
-      let client = await this.$store.state.client;
       const wallet = await this.$store.getters.getWallet;
       const options = await this.$store.getters.getOptions;
 
@@ -57,16 +50,18 @@ export default defineComponent({
 
       let bal = parseCoins(this.amount);
       try {
-        const resSend: BroadcastTxResponse = await autonomyClient.sendTokens(
+        const resSend = await autonomyClient.sendTokens(
           addres.address,
           this.recipient,
           bal,
           "Memo tx"
         );
 
-        // if (resSend.code != 0) {
-        //   alert(resSend.rawLog);
-        // }
+        if (resSend.code == 0) {
+          this.recipient = "";
+          this.amount = "";
+          this.memo = null;
+        }
       } catch (e) {
         alert(e);
       }
@@ -111,6 +106,7 @@ export default defineComponent({
       font-size: 1.2rem;
       padding: 0.4rem 1.8rem;
       color: hsl(183, 100%, 15%);
+      text-transform: lowercase;
 
       &:focus {
         outline: none;
