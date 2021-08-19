@@ -75,7 +75,7 @@ export default defineComponent({
         let wallet = await DirectSecp256k1HdWallet.fromMnemonic(this.menmonic, {
           prefix: "autonomy",
         });
-        const gasPrice = GasPrice.fromString("10atn");
+        const gasPrice = GasPrice.fromString("10aut");
         const gasLimits = {
           send: 200000,
         };
@@ -84,8 +84,9 @@ export default defineComponent({
           gasLimits: gasLimits,
           registry: new Registry([...autonomyRegistry]),
         };
+
         let client = await AutonomyClient.autonomySigner(
-          "localhost:26657",
+          this.$store.state.endpoints.rpc,
           wallet,
           options
         );

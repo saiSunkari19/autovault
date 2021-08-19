@@ -19,8 +19,8 @@ export const store = createStore<State>({
     options: {},
     hasWallet: false,
     endpoints: {
-      rpc: '127.0.0.1:26657',
-      faucet: 'http://127.0.0.1:8000',
+      rpc: '20.42.119.7:26657',
+      faucet: 'http://20.42.119.7:8000',
       faucetDenom: 'aut',
     },
   },
