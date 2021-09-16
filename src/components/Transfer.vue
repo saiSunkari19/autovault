@@ -2,11 +2,11 @@
   <Loader v-if="isLoading" />
   <div class="container">
     <div class="transfer">
-      <label for="recipient">Recipient:</label>
-      <input type="text" class="inp-text" v-model="recipient" />
-      <label for="amount">Amount:</label>
-      <input type="text" class="inp-text" v-model="amount" />
-      <label for="memo"> Memo:</label>
+      <label for="recipient">Recipient:</label><br />
+      <input type="text" class="inp-text" v-model="recipient" /><br />
+      <label for="amount">Amount:</label><br />
+      <input type="text" class="inp-text" v-model="amount" /> <br />
+      <label for="memo"> Memo:</label><br />
       <input type="text" class="inp-text" v-model="memo" />
       <button @click="transfer">Send</button>
     </div>
@@ -105,12 +105,12 @@ export default defineComponent({
     margin-bottom: 1rem;
     font-size: 1rem;
     color: white;
-    font-weight: 700;
+    font-weight: 400;
 
     input {
       border: none;
       font-size: 1.5rem;
-      margin-bottom: 1rem;
+      margin: 1rem;
     }
     .inp-text {
       border: none;

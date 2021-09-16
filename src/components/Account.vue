@@ -12,7 +12,7 @@
             <li>{{ balance.denom }} - {{ balance.amount }}</li>
           </ul>
         </div>
-        <div class="faucet">
+        <div class="faucet" v-else>
           <button @click="getTokens">Get Tokens</button>
         </div>
       </div>
@@ -141,7 +141,7 @@ export default defineComponent({
     }
   }
   .send-card {
-    margin-left: 2rem;
+    float: right;
   }
 }
 
