@@ -7,6 +7,7 @@ export interface State {
   queryClient: any
   options: any
   hasWallet: any
+  isLoading: any
   endpoints: any
 }
 
@@ -18,10 +19,12 @@ export const store = createStore<State>({
     queryClient: {},
     options: {},
     hasWallet: false,
+    isLoading: false,
     endpoints: {
       rpc: '20.42.119.7:26657',
       faucet: 'http://20.42.119.7:8000',
       faucetDenom: 'aut',
+      fee: '20000',
     },
   },
   mutations: {
@@ -40,6 +43,9 @@ export const store = createStore<State>({
     HAS_WALLET(state, payload) {
       state.hasWallet = payload
     },
+    IS_LOADING(state, payload) {
+      state.isLoading = payload
+    },
   },
   actions: {
     setWallet({ commit }, wallet) {
@@ -56,6 +62,9 @@ export const store = createStore<State>({
     },
     hasWallet({ commit }, payload) {
       commit('HAS_WALLET', payload)
+    },
+    setIsLoading({ commit }, payload) {
+      commit('IS_LOADING', payload)
     },
   },
   getters: {
@@ -76,6 +85,9 @@ export const store = createStore<State>({
     },
     getEndPoints(state) {
       return state.endpoints
+    },
+    getIsLoading(state) {
+      return state.isLoading
     },
   },
   modules: {},

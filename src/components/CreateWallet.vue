@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Loader v-if="isLoading" />
     <div class="create-wallet">
       <div class="info">
         <h2>Please save these details</h2>
@@ -22,6 +23,7 @@
 <script >
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { defineComponent } from "vue";
+import Loader from "@/components/Loader.vue";
 
 export default defineComponent({
   props: ["TogglePopUp"],
@@ -29,14 +31,20 @@ export default defineComponent({
     return {
       address: "",
       mnemonic: "",
+      isLoading: false,
     };
   },
   mounted() {
     this.createWallet();
   },
-
+  components: {
+    Loader,
+  },
   methods: {
     async createWallet() {
+      this.isLoading = await this.$store.getters.getIsLoading;
+      console.log("createWaller", this.isLoading);
+
       const wallet = await DirectSecp256k1HdWallet.generate(24, {
         prefix: "autonomy",
       });

@@ -12,7 +12,7 @@
             <li>{{ balance.denom }} - {{ balance.amount }}</li>
           </ul>
         </div>
-        <div class="faucet" v-else>
+        <div class="faucet">
           <button @click="getTokens">Get Tokens</button>
         </div>
       </div>
@@ -38,8 +38,9 @@ export default defineComponent({
   components: {
     Transfer,
   },
-  mounted() {
+  async mounted() {
     this.getBalances();
+    this.isLoading = await this.$store.getters.getIsLoading;
   },
   computed: {
     getSortedBalances() {
@@ -58,10 +59,10 @@ export default defineComponent({
       let [account] = await wallet.getAccounts();
       this.address = account.address;
       let res = await queryclient.bank.allBalances(account.address);
-      console.log(res);
       this.balances = res;
     },
     async getTokens() {
+      await this.$store.dispatch("setIsLoading", true);
       const endpoints = await this.$store.getters.getEndPoints;
       const faucetClient = new FaucetClient(endpoints.faucet);
 
@@ -69,6 +70,8 @@ export default defineComponent({
         this.address,
         endpoints.faucetDenom
       );
+
+      await this.$store.dispatch("setIsLoading", false);
 
       console.log(res);
     },
@@ -103,11 +106,16 @@ export default defineComponent({
 
   .account {
     margin: 2rem 0 2rem 1rem;
+    width: 50%;
     .address-wrapper {
       font-size: 1rem;
       float: left;
       margin-bottom: 1rem;
+      word-wrap: break-word;
+      width: 90%;
+
       .balance-wrapper {
+        word-wrap: break-word;
         ul li {
           list-style-type: none;
           font-size: 1rem;

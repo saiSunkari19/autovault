@@ -1,4 +1,5 @@
 <template>
+  <Loader v-if="isLoading" />
   <div class="popup">
     <div class="issue">
       <h2>Create Token</h2>
@@ -40,10 +41,14 @@ import { AutonomyClient } from "@autonomysdk/ts-client";
 import { StdFee } from "@cosmjs/amino";
 import { BroadcastTxResponse } from "@cosmjs/stargate";
 import { reactive, toRefs } from "@vue/reactivity";
+import Loader from "@/components/Loader.vue";
+import { useStore } from "@/store";
+import { computed } from "vue";
 export default {
   props: ["TogglePopup"],
 
   setup() {
+    const store = useStore();
     const state = reactive({
       sender: "",
       denom: "",
@@ -56,7 +61,11 @@ export default {
 
     return {
       ...toRefs(state),
+      isLoading: computed(() => store.getters.getIsLoading),
     };
+  },
+  components: {
+    Loader,
   },
   methods: {
     async createToken() {
@@ -67,46 +76,53 @@ export default {
         this.initialSupply,
         this.gas
       );
+      if (this.denom != "" && this.displayName != "") {
+        await this.$store.dispatch("setIsLoading", true);
+        try {
+          let wallet = await this.$store.getters.getWallet;
+          let endpoints = await this.$store.getters.getEndPoints;
+          let options = await this.$store.getters.getOptions;
 
-      try {
-        let wallet = await this.$store.getters.getWallet;
-        let endpoints = await this.$store.getters.getEndPoints;
-        let options = await this.$store.getters.getOptions;
+          let autonomyClient = await AutonomyClient.autonomySigner(
+            endpoints.rpc,
+            wallet,
+            options
+          );
+          let [account] = await wallet.getAccounts();
+          const fee = {
+            amount: [
+              {
+                denom: endpoints.faucetDenom,
+                amount: endpoints.fee,
+              },
+            ],
+            gas: this.gas,
+          };
+          const res = await autonomyClient.issueTokens(
+            account.address,
+            this.denom,
+            this.displayName,
+            new Long(this.decimals),
+            new Long(this.initialSupply),
+            fee,
+            this.memo
+          );
+          console.log("Error", res);
 
-        let autonomyClient = await AutonomyClient.autonomySigner(
-          endpoints.rpc,
-          wallet,
-          options
-        );
-        let [account] = await wallet.getAccounts();
-        const fee = {
-          amount: [
-            {
-              denom: "aut",
-              amount: "30",
-            },
-          ],
-          gas: this.gas,
-        };
-        const res = await autonomyClient.issueTokens(
-          account.address,
-          this.denom,
-          this.displayName,
-          new Long(this.decimals),
-          new Long(this.initialSupply),
-          fee,
-          "test-1"
-        );
-        console.log("Error", res);
-
-        if (res.code == 0) {
-          this.TogglePopup();
-        } else {
-          alert(res.rawLog);
+          if (res.code == 0) {
+            await this.$store.dispatch("setIsLoading", false);
+            this.TogglePopup();
+            alert("tx successfully added block");
+          } else {
+            await this.$store.dispatch("setIsLoading", false);
+            alert(res.rawLog);
+          }
+        } catch (e) {
+          await this.$store.dispatch("setIsLoading", false);
+          alert(e);
         }
-        // this.res.push(res);
-      } catch (e) {
-        alert(e);
+      } else {
+        alert("invalid params");
       }
     },
   },

@@ -1,4 +1,5 @@
 <template>
+  <Loader v-if="isLoading" />
   <div class="create-wallet">
     <create-wallet
       v-if="popuptrigger.buttonTrigger"
@@ -29,7 +30,7 @@
 </template>
 
 <script >
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import CreateWallet from "@/components/CreateWallet.vue";
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import {
@@ -45,6 +46,7 @@ import {
 } from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { useStore } from "@/store";
+import Loader from "@/components/Loader.vue";
 export default defineComponent({
   setup() {
     const store = useStore();
@@ -62,20 +64,26 @@ export default defineComponent({
       menmonic,
       createWallet,
       popuptrigger,
+      isLoading: computed(() => store.getters.getIsLoading),
     };
   },
   components: {
     CreateWallet,
+    Loader,
   },
   methods: {
     async importWallet() {
+      console.log("Loading:", this.isLoading);
+
       let words = this.menmonic.split(" ");
       if (words.length === 12 || words.length === 24) {
+        await this.$store.dispatch("setIsLoading", true);
         console.log(this.menmonic);
         let wallet = await DirectSecp256k1HdWallet.fromMnemonic(this.menmonic, {
           prefix: "autonomy",
         });
-        const gasPrice = GasPrice.fromString("10aut");
+        let { fee, faucetDenom } = await this.$store.getters.getEndPoints;
+        const gasPrice = GasPrice.fromString('1'+faucetDenom);
         const gasLimits = {
           send: 200000,
         };
@@ -106,6 +114,8 @@ export default defineComponent({
         await this.$store.dispatch("setQueryClient", queryclient);
         await this.$store.dispatch("setOptions", options);
         await this.$store.dispatch("hasWallet", true);
+
+        await this.$store.dispatch("setIsLoading", false);
         this.$router.push({ name: "Index" });
       } else {
         alert("Invalid Menmonic");
